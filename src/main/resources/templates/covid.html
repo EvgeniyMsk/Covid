@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css}" />
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                    <a class="nav-link active" aria-current="page"  th:text="'Привет, ' + ${otd} + ' отдел!'"></a>
+                    <form class="d-flex" th:action="@{/logout}" th:method="post">
+                        <button class="btn btn-outline-success" type="submit">Выйти</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="row">
+        <h1 th:text="'Сведения об эпидемиологической обстановке в ' + ${otd} + ' отделе'" style="text-align: center"></h1>
+        <h2 th:text="'В ' + ${otd} + ' отделе Оперативного управления ФСО России по состоянию на ' + ${date} + ' г.'" style="text-align: center"></h2>
+        <table class="table table-bordered">
+            <thead style="text-align: center">
+            <th>
+                № п/п
+            </th>
+            <th>
+                Наименование показателя
+            </th>
+            <th>
+                Кол-во
+            </th>
+            </thead>
+            <tbody>
+            <form th:method="POST" th:action="@{/covidinfo}" th:object="${covidinfo}">
+                <tr>
+                    <td>
+                        1.
+                    </td>
+                    <td>
+                        Находится на карантине (в связи с контактами с гражданами, заболевшими коронавирусной инфекцией,
+                        или прибывшие из-за границы)
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{quarantine}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        2.
+                    </td>
+                    <td>
+                        Переведено на дистанционное исполнение служебных (трудовых) обязанностей на дому
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{distance}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        3.
+                    </td>
+                    <td>
+                        Отстранено от службы в связи с повышенной температурой тела или иными симптомами респираторных
+                        заболеваний, за сутки
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{suspended}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="2">
+                        4.
+                    </td>
+                    <td>
+                        Проведено исследований на наличие колонавирусной инфекции, всего
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{research}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right">
+                        из них за сутки
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{researchToday}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="3">
+                        5.
+                    </td>
+                    <td>
+                        Находится на лечении с заболеваниями коронавирусной инфекцией, пневмонией и ОРВИ, всего
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{onTreatment}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right">
+                        из них амбулаторно
+                        (в том числе бессимптомных с положительным тестом на коронавирус)
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{onTreatmentAmbulance}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right">
+                        из них в стационаре
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{onTreatmentStationary}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        6.
+                    </td>
+                    <td>
+                        Заболевших коронавирусной инфекцией, пневмонией и ОРВИ, за сутки
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{covidToday}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="2">
+                        7.
+                    </td>
+                    <td>
+                        Подтверждено наличие коронавирусной инфекцией у находящихся на лечении
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{confirmedCovid}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right">
+                        в том числе за сутки
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{confirmedCovidToday}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="2">
+                        8.
+                    </td>
+                    <td>
+                        Выздоровело после заболевания коронавирусной инфекцией, ОРВИ и пневмонией
+                        (включая бессимптомных с положительным тестом), всего
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{recoveredTotal}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right">
+                        из них за сутки
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{recoveredToday}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="2">
+                        9.
+                    </td>
+                    <td>
+                        Случаев с летальным исходом от коронавирусной инфекции, всего
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{lethalTotal}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right">
+                        из них за сутки
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{lethalToday}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        10.
+                    </td>
+                    <td>
+                        Количество сотрудников старше 65 лет, освобожденных от исполнения трудовых обязанностей
+                        и находящихся в режиме изоляции
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{selfisolation65}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        11.
+                    </td>
+                    <td>
+                        Количество личного состава, исполняющего служебные обязанности на текущую
+                        дату (военнослужащих/гражданского персонала)
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{presentTotal}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="9">
+                        12.
+                    </td>
+                    <td>
+                        Количество вакницированных сотрудников, всего
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{vaccinatedTotal}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right">
+                        из них только первым компонентом вакцины "Спутник V" ("Гам-Ковид-Вак")
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{firstSputnik}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right">
+                        из них двумя компонентами вакцины "Спутник V" ("Гам-Ковид-Вак")
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{secondSputnik}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right">
+                        из них только первым компонентом вакцины "ЭпиВакКорона" ("Вектор")
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{firstEpivak}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right">
+                        из них двумя компонентами вакцины "ЭпиВакКорона" ("Вектор")
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{secondEpivak}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right">
+                        из них только первым компонентом вакцины "КовиВак" ("НИИ им. Чумакова")
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{firstCovivak}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right">
+                        из них двумя компонентами вакцины "КовиВак" ("НИИ им. Чумакова")
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{secondCovivak}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right">
+                        из них однокомпонентной вакциной "спутник Лайт"
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{sputnikLight}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right">
+                        вакцинировано за сутки (любым видом и компонентом вакцины)
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{vaccinatedToday}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        13.
+                    </td>
+                    <td>
+                        Количество сотрудников, подлежащих повторной вакцинации
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{revaccinated}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="2">
+                        14.
+                    </td>
+                    <td>
+                        Количество сотрудников, вакцинированных повторно, всего
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{revaccinatedTotal}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: right">
+                        из них за сутки
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{revaccinatedToday}" required>
+                    </td>
+                </tr>
+            </form>
+            </tbody>
+        </table>
+        <h1 style="text-align: center">Обеспеченность средствами противодействия распространению инфекции</h1>
+        <table class="table table-bordered">
+            <thead style="text-align: center">
+            <th>
+                №
+            </th>
+            <th>
+                Наименование показателя
+            </th>
+            <th>
+                Кол-во
+            </th>
+            </thead>
+            <form th:method="POST" th:action="@{/covidinfo}" th:object="${covidinfo}">
+                <tbody style="text-align: left">
+                <tr>
+                    <td>
+                        1.
+                    </td>
+                    <td>
+                        Маски медицинские одноразовые, шт
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{masksOne}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        2.
+                    </td>
+                    <td>
+                        Маски многоразовые, шт
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{masksMany}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        3.
+                    </td>
+                    <td>
+                        Респираторы с клапаном/без клапана, шт.
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{respirators}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        4.
+                    </td>
+                    <td>
+                        Перчатки одноразовые, шт.
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{gloves}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        5.
+                    </td>
+                    <td>
+                        Комбинезоны одноразовые, шт.
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{overalls}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        6.
+                    </td>
+                    <td>
+                        Комбинезоны из мембранной ткани, шт.
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{overallsMembrana}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        7.
+                    </td>
+                    <td>
+                        Комбинезоны из мембранной ткани повышенной плотности, шт.
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{overallsMembranaHard}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        8.
+                    </td>
+                    <td>
+                        Кожный антисептик, л.
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{antiseptik}" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        9.
+                    </td>
+                    <td>
+                        Средства для дезинфекции поверхностей, л
+                    </td>
+                    <td>
+                        <input type="number" th:field="*{chlorine}" required>
+                    </td>
+                </tr>
+                </tbody>
+            </form>
+        </table>
+        <form th:method="POST" th:action="@{/covidinfo}" th:object="${covidinfo}">
+            <button type="submit">Подать данные</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
