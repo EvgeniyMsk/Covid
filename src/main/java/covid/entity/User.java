@@ -23,6 +23,7 @@ public class User implements UserDetails {
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<ERole> roles;
+    private int department;
 
     public User() {
     }
@@ -98,6 +99,14 @@ public class User implements UserDetails {
 
     public void setRoles(Set<ERole> roles) {
         this.roles = roles;
+    }
+
+    public int getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(int department) {
+        this.department = department;
     }
 
     @Override

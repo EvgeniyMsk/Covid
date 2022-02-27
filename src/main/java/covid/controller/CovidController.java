@@ -1,39 +1,43 @@
 package covid.controller;
 
 import covid.entity.CovidInfo;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import covid.entity.User;
+import covid.repository.UserRepository;
+import covid.service.CovidInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 
-@Controller
+@RestController
+@CrossOrigin
+@RequestMapping("/api")
 public class CovidController {
+    private final CovidInfoService covidInfoService;
+    private final UserRepository userRepository;
+
+    @Autowired
+    public CovidController(CovidInfoService covidInfoService, UserRepository userRepository) {
+        this.covidInfoService = covidInfoService;
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("/covid")
-    public String greeting(@ModelAttribute("covidinfo") CovidInfo covidInfo, Principal principal, Model model) {
-        model.addAttribute("otd", principal.getName().substring(3));
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        model.addAttribute("date", dateFormat.format(new Date()));
-        return "covid";
+    public ResponseEntity<CovidInfo> getCovid(Principal principal) {
+        return new ResponseEntity<>(covidInfoService.getCovidInfo(principal), HttpStatus.OK);
+    }
+
+    @PostMapping("/covid")
+    public ResponseEntity<CovidInfo> addCovid(@RequestBody CovidInfo covidInfo, Principal principal) {
+        System.out.println(covidInfo);
+        return new ResponseEntity<>(covidInfoService.createCovidInfo(covidInfo, principal), HttpStatus.OK);
     }
 
     @GetMapping("/users")
-    public String users() {
-        return "users";
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
-    @PostMapping("/login")
-    public String auth() {
-        return "login";
+    public ResponseEntity<List<User>> users() {
+        return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
     }
 }
